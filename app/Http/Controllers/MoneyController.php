@@ -28,12 +28,12 @@ class MoneyController extends Controller
             ->orderByDesc('year')
             ->orderByDesc('month')
             ->get()
-            ->map(function($el) {
+            ->map(function ($el) {
                 $el->type = Str::remove('_of_month', $el->type);
 
                 return $el;
             })
-            ->groupBy(function($el) {
+            ->groupBy(function ($el) {
                 return $el->month_year;
             });
 
@@ -92,9 +92,16 @@ class MoneyController extends Controller
         }
 
         foreach ($res as $date => $r) {
-            $res[$date]['diff'] = numbFormat($r['end'] - $r['start']);
-            $res[$date]['start'] = numbFormat($r['start']);
-            $res[$date]['end'] = numbFormat($r['end']);
+            $start = $r['start'] ?? 0;
+            $end = $r['end'] ?? 0;
+
+            if ($start != 0 && $end != 0) {
+                $res[$date]['diff'] = numbFormat($end - $start);
+            } else {
+                $res[$date]['diff'] = '0';
+            }
+            $res[$date]['start'] = numbFormat($start);
+            $res[$date]['end'] = numbFormat($end);
         }
 
         return $this->json($res);
