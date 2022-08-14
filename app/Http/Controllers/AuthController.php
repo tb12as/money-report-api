@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -47,5 +48,15 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'Incorrect username or password'], 401);
+    }
+
+    public function getUser()
+    {
+        $user = Auth::user();
+        if ($user) {
+            return $this->success(data: $user);
+        }
+
+        return $this->fail(data: null, status: 401);
     }
 }

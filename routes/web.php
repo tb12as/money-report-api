@@ -25,6 +25,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('/login', 'AuthController@login');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
+        $router->get('/get-user', 'AuthController@getUser');
+
         // Money API
         $router->group(['prefix' => 'money'], function () use ($router) {
             $router->get('/', 'MoneyController@index');
